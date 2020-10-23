@@ -21,12 +21,23 @@
             v-for="(todo, i) in todos"
             :key="i"
           >
-            <div class="circle">
-              <v-btn icon large color="green"><v-icon>mdi-check</v-icon></v-btn>
+            <div
+              class="circle"
+              @click="editTask(todo)"
+              :style="{ border: todo.complete ? '1px solid green' : '' }"
+            >
+              <!-- 인라인 스타일 바인딩 -->
+              <v-btn icon large color="green" v-show="todo.complete"
+                ><v-icon>mdi-check</v-icon></v-btn
+              >
             </div>
-            <p>{{ todo.title }}</p>
+            <p :class="{ 'text-complete': todo.complete }">
+              {{ todo.title }}
+            </p>
             <v-spacer></v-spacer>
-            <v-btn icon large><v-icon>mdi-close</v-icon></v-btn>
+            <v-btn icon large @click="deleteTask(todo)">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
           </v-row>
         </div>
         <v-divider></v-divider>
@@ -52,6 +63,7 @@
 <script>
 // @ is an alias to /src
 import { mapState } from 'vuex';
+import _ from 'lodash';
 export default {
   name: 'Home',
   data() {
@@ -61,6 +73,13 @@ export default {
   },
   computed: {
     ...mapState(['todos']),
+    filteredTodos() {
+      let clone = _.cloneDeep(this.todos);
+      return clone.map((el) => {
+        el['isHover'] = false;
+        return el;
+      });
+    },
     newId() {
       return (
         this.todos.reduce((acc, cur) => {
@@ -82,8 +101,16 @@ export default {
         complete: false,
         title: this.newTitle,
       });
+      this.newTitle = '';
     },
     // todos의 모든 id값을 찾아서 적용해줌 브라우저상에선 안보임
+    editTask(task) {
+      task.complete = !task.complete;
+      this.$store.commit('editTask', task);
+    },
+    deleteTask(task) {
+      this.$store.commit('deleteTask', task);
+    },
   },
 };
 </script>
@@ -108,6 +135,7 @@ h1 {
   height: 80px;
   background-color: #eee;
 }
+
 .list-item {
   padding: 10px 16px;
   .circle {
@@ -116,6 +144,7 @@ h1 {
     border-radius: 23px;
     border: 1px solid gray;
   }
+
   p {
     margin: 0;
     margin-left: 20px;
@@ -131,5 +160,10 @@ h1 {
     top: 3px;
     font-size: 13px;
   }
+}
+
+.text-complete {
+  text-decoration-line: line-through;
+  opacity: 0.5;
 }
 </style>
