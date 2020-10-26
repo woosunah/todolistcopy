@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
     todos: [
       {
@@ -29,7 +29,23 @@ export default new Vuex.Store({
       let deleteIndex = state.todos.indexOf(targetTask);
       state.todos.splice(deleteIndex, 1);
     },
+    initialiseStore(state) {
+      if (localStorage.getItem('store')) {
+        this.replaceState(
+          Object.assign(state, JSON.parse(localStorage.getItem('store')))
+        );
+        // Object.assign 기존의 state에 복제해줌
+      }
+      // json.parse 텍스트로 된 json파을 js로 변환하는것
+    },
   },
   actions: {},
   modules: {},
 });
+
+store.subscribe((mutation, state) => {
+  localStorage.setItem('store', JSON.stringify(state));
+  // 객체를 데이터로 전송할때 사용? - json 기본 텍스트로 바뀜
+});
+
+export default store;

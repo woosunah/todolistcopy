@@ -18,8 +18,9 @@
           <v-row
             align="center"
             class="list-item"
-            v-for="(todo, i) in todos"
+            v-for="(todo, i) in filteredTodos"
             :key="i"
+            no-gutters
           >
             <div
               class="circle"
@@ -47,10 +48,24 @@
           align="center"
           no-gutters
         >
-          <p>{{ todos.length }} items left</p>
-          <v-btn text small outlined>All</v-btn>
-          <v-btn text small>Active</v-btn>
-          <v-btn text small>Completed</v-btn>
+          <p>{{ filteredTodos.length }} items left</p>
+          <v-btn text small :outlined="filter === 'all'" @click="filter = 'all'"
+            >All</v-btn
+          >
+          <v-btn
+            text
+            small
+            :outlined="filter === 'active'"
+            @click="filter = 'active'"
+            >Active</v-btn
+          >
+          <v-btn
+            text
+            small
+            :outlined="filter === 'completed'"
+            @click="filter = 'completed'"
+            >Completed</v-btn
+          >
         </v-row>
       </v-card>
       <core-app-bar></core-app-bar>
@@ -63,22 +78,25 @@
 <script>
 // @ is an alias to /src
 import { mapState } from 'vuex';
-import _ from 'lodash';
 export default {
   name: 'Home',
   data() {
     return {
       newTitle: '',
+      filter: '',
     };
   },
   computed: {
     ...mapState(['todos']),
     filteredTodos() {
-      let clone = _.cloneDeep(this.todos);
-      return clone.map((el) => {
-        el['isHover'] = false;
-        return el;
-      });
+      switch (this.filter) {
+        case 'active':
+          return this.todos.filter((el) => !el.complete);
+        case 'completed':
+          return this.todos.filter((el) => el.complete);
+        default:
+          return this.todos;
+      }
     },
     newId() {
       return (
@@ -123,7 +141,7 @@ export default {
   width: 100%;
   max-width: 600px;
   height: 100vh;
-  border: 1px solid red;
+  // border: 1px solid red;
 }
 h1 {
   font-size: 100px;
@@ -154,10 +172,11 @@ h1 {
 }
 .todo-footer-extention {
   position: relative;
+  height: 40px;
   p {
     position: absolute;
     left: 10px;
-    top: 3px;
+    top: 10px;
     font-size: 13px;
   }
 }
