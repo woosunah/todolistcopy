@@ -25,10 +25,10 @@
             <div
               class="circle"
               @click="editTask(todo)"
-              :style="{ border: todo.complete ? '1px solid green' : '' }"
+              :style="{ border: todo.complete ? '1px solid #86a8e7' : '' }"
             >
               <!-- 인라인 스타일 바인딩 -->
-              <v-btn icon large color="green" v-show="todo.complete"
+              <v-btn icon large color="#86a8e7" v-show="todo.complete"
                 ><v-icon>mdi-check</v-icon></v-btn
               >
             </div>
@@ -135,7 +135,21 @@ export default {
 
 <style lang="scss" scoped>
 .home {
-  background-color: #f5f5f5;
+  // background-color: #f5f5f5;
+  // background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
+  background: #7f7fd5; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #91eae4,
+    #86a8e7,
+    #7f7fd5
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #91eae4,
+    #86a8e7,
+    #7f7fd5
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 .home-container {
   width: 100%;
@@ -147,7 +161,8 @@ h1 {
   font-size: 100px;
   text-align: center;
   font-weight: 300;
-  color: #af2f2f26;
+  // color: #af2f2f26;
+  color: #fff;
 }
 .todo-text-filed {
   height: 80px;
