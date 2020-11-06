@@ -33,7 +33,9 @@
               >
             </div>
             <p :class="{ 'text-complete': todo.complete }">
+              <!-- :class (클래스 바인딩)todo.complete이 true인지, false인지에 따라서 true일때, 'text-complete'가 나오게 하려고 -->
               {{ todo.title }}
+              <!-- store에 배열안에 객체.문자열을 가져올때 {{}}해주는것 -->
             </p>
             <v-spacer></v-spacer>
             <v-btn icon large @click="deleteTask(todo)">

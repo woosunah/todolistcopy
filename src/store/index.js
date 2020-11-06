@@ -46,6 +46,8 @@ const store = new Vuex.Store({
 store.subscribe((mutation, state) => {
   localStorage.setItem('store', JSON.stringify(state));
   // 객체를 데이터로 전송할때 사용? - json 기본 텍스트로 바뀜
+  // subscribe는 위의 모든 mutation을 다 수행한 후에 store에 저장 / 'store'라는 키로 저장
+  // 새로고침하면 데이터가 다 날아갈까봐서 방지하려고
 });
 
 export default store;

@@ -13,5 +13,7 @@ new Vue({
   render: (h) => h(App),
   beforeCreate() {
     this.$store.commit('initaliseStore');
+    // 새로운 페이지 생성전에 , ('')실행
+    // vue제일 최상단이 main.js라서 beforeCreate를 main.js에 작성해줌
   },
 }).$mount('#app');
